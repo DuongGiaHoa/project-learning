@@ -1,0 +1,28 @@
+#output {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.marble-timeline {
+  position: relative;
+  height: 60px;
+  padding: 1rem;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.marble {
+  display: inline-block;
+  position: relative;
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  line-height: 40px;
+  text-align: center;
+  font-weight: bold;
+  transition: transform 3s linear;
+}

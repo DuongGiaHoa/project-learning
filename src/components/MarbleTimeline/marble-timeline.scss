@@ -1,0 +1,64 @@
+.marble-wrapper {
+  margin-bottom: 20px;
+}
+
+.marble-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.marble-timeline {
+  position: relative;
+  height: 40px;
+  border-bottom: 2px solid #ccc;
+  margin-left: 10px;
+  overflow: hidden;
+}
+
+.marble-arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(to right, #000 95%, transparent 100%);
+  z-index: 0;
+}
+
+.marble-arrow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -4px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid black;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+}
+
+.marble {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0; 
+  left: 0;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background: #4fc3f7;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  z-index: 1;
+  opacity: 0;
+  animation: moveMarble 5s linear forwards;
+}
+
+@keyframes moveMarble {
+  0% { transform: translateX(0); opacity: 0; }
+  5% { opacity: 1; }
+  100% { transform: translateX(600px); opacity: 1; }
+}
