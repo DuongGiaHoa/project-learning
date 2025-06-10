@@ -1,0 +1,144 @@
+@use "sass:color";
+
+$primary-color: #007bff;
+$primary-dark-color: #0056b3;
+$danger-color: #dc3545;
+$danger-dark-color: #c82333;
+$light-gray: #f4f4f4;
+$medium-gray: #eee;
+$dark-gray: #333;
+$text-color: #555;
+$border-color: #ddd;
+$filter-bg-color: #e2e6ea;
+$filter-border-color: #ced4da;
+
+.task-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px;
+
+    &__title {
+        text-align: center;
+        color: $dark-gray;
+        margin-bottom: 25px;
+    }
+}
+.task-form {
+    display: flex;
+    margin-bottom: 20px;
+
+    &__input {
+        flex-grow: 1;
+        padding: 10px 15px;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        font-size: 16px;
+        outline: none;
+
+        &:focus {
+            border-color: $primary-color;
+        }
+    }
+
+    &__button {
+        background-color: $primary-color;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-left: 10px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: $primary-dark-color;
+        }
+    }
+}
+
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid $medium-gray;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &__checkbox {
+        margin-right: 15px;
+        transform: scale(1.3);
+        cursor: pointer;
+    }
+
+    &__text {
+        flex-grow: 1;
+        font-size: 17px;
+        color: $text-color;
+        word-break: break-word;
+    }
+
+    &--completed &__text {
+        text-decoration: line-through;
+        color: #aaa;
+    }
+
+    // ELEMENT: task-item__delete-button
+    &__delete-button {
+        background-color: $danger-color;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-left: 10px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: $danger-dark-color;
+        }
+    }
+}
+
+.filter-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    border-top: 1px solid $medium-gray;
+    padding-top: 20px;
+
+    .filter-button { 
+        background-color: $filter-bg-color;
+        color: $dark-gray;
+        border: 1px solid $filter-border-color;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 15px;
+        margin: 0 5px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: color.adjust($filter-bg-color, $lightness: -5%); 
+        }
+
+        &--active {
+            background-color: $primary-color;
+            color: white;
+            border-color: $primary-color;
+        }
+    }
+}

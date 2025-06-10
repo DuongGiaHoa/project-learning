@@ -1,24 +1,37 @@
-export function renderMarbleEditor(onRun: (input: string, operator: string) => void): HTMLElement {
-  const container = document.createElement('div');
-  container.className = 'marble-editor';
+export class MarbleEditor {
+  private onRun: (input: string, operator: string) => void;
+  private container: HTMLElement;
+  private inputElement: HTMLInputElement;
+  private operatorSelectElement: HTMLSelectElement;
+  private runButtonElement: HTMLButtonElement;
 
-  const input = document.createElement('input');
-  input.placeholder = '--a--b--c--|';
+  constructor(onRun: (input: string, operator: string) => void) {
+    this.onRun = onRun; // Lưu callback onRun
+    this.container = document.createElement('div');
+    this.container.className = 'marble-editor';
 
-  const operatorSelect = document.createElement('select');
-  ['map', 'filter', 'switchMap', 'mergeMap'].forEach(op => {
-    const option = document.createElement('option');
-    option.value = op;
-    option.textContent = op;
-    operatorSelect.appendChild(option);
-  });
+    this.inputElement = document.createElement('input');
+    this.inputElement.placeholder = '--a--b--c--|';
 
-  const runButton = document.createElement('button');
-  runButton.textContent = 'Run';
-  runButton.onclick = () => {
-    onRun(input.value, operatorSelect.value);
-  };
+    this.operatorSelectElement = document.createElement('select');
+    ['map', 'filter', 'switchMap', 'mergeMap'].forEach(op => {
+      const option = document.createElement('option');
+      option.value = op;
+      option.textContent = op;
+      this.operatorSelectElement.appendChild(option);
+    });
 
-  container.append('Input:', input, ' Operator:', operatorSelect, runButton);
-  return container;
+    this.runButtonElement = document.createElement('button');
+    this.runButtonElement.textContent = 'Run';
+
+    this.runButtonElement.onclick = () => {
+      this.onRun(this.inputElement.value, this.operatorSelectElement.value);
+    };
+
+    this.container.append('Input:', this.inputElement, ' Operator:', this.operatorSelectElement, this.runButtonElement);
+  }
+
+  public getElement(): HTMLElement {
+    return this.container;
+  }
 }

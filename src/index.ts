@@ -3,7 +3,8 @@ import Navigo from 'navigo';
 
 import { renderHeader } from './components/Headers/header';
 import { renderSidebar } from './components/Sidebar/sidebar';
-import { renderRxjsVisualizer } from './components/RxJS/rxjs-example';
+import { RxjsVisualizer } from './components/RxJS/rxjs-example';
+import { Todo } from './components/ToDo/todo';
 
 const app = document.body;
 app.innerHTML = ''; // clear all
@@ -30,8 +31,14 @@ function router() {
 
   switch (hash) {
     case '#/rxjs':
-      renderRxjsVisualizer(content);
+      const rxjsVisualizer = new RxjsVisualizer(content);
+      rxjsVisualizer.render();
       break;
+
+    case '#/todo':
+        const todo = new Todo(content);
+        break;
+        
     case '#/about':
       content.innerHTML = '<h2>About</h2><p>This is a sample SPA with TypeScript and RxJS.</p>';
       break;

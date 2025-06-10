@@ -8,7 +8,7 @@ export function renderSidebar(): HTMLElement {
       <ul>
         <li><a href="#/">Home</a></li>
         <li><a href="#/rxjs">RxJS</a></li>
-        <li><a href="#/about">About</a></li>
+        <li><a href="#/todo">ToDo</a></li>
       </ul>
     </nav>
   `;
