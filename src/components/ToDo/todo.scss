@@ -135,7 +135,7 @@ $filter-border-color: #ced4da;
           background-color: color.adjust($filter-bg-color, $lightness: -5%); 
         }
 
-        &--active {
+        &--all, &--active, &--completed {
             background-color: $primary-color;
             color: white;
             border-color: $primary-color;

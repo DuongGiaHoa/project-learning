@@ -14,8 +14,11 @@ interface ITask {
   completed: boolean;
 }
 
-type FilterType = 'all' | 'active' | 'completed';
-
+enum FilterType {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 export class Todo {
   private tasksList$: BehaviorSubject<ITask[]>;
   private filter$: BehaviorSubject<FilterType>;
@@ -34,7 +37,7 @@ export class Todo {
 
     const initTasks = JSON.parse(localStorage.getItem('tasksList') || '[]');
     this.tasksList$ = new BehaviorSubject<ITask[]>(initTasks);
-    this.filter$ = new BehaviorSubject<FilterType>('all');
+    this.filter$ = new BehaviorSubject<FilterType>(FilterType.All);
 
     this.subscribeToLocalStorageUpdates();
     this.renderInitialDom();
@@ -73,7 +76,7 @@ export class Todo {
     this.appContainer.appendChild(filterGroup);
 
     this.filterAllBtn = document.createElement('button');
-    this.filterAllBtn.className = 'filter-button filter-button--active';
+    this.filterAllBtn.className = `filter-button filter-button--${FilterType.All}`;
     this.filterAllBtn.textContent = 'All';
     filterGroup.appendChild(this.filterAllBtn);
 
@@ -138,15 +141,15 @@ export class Todo {
     const filterAllClick$ = fromEvent<MouseEvent>(
       this.filterAllBtn,
       'click'
-    ).pipe(map(() => 'all' as FilterType));
+    ).pipe(map(() => FilterType.All));
     const filterActiveClick$ = fromEvent<MouseEvent>(
       this.filterActiveBtn,
       'click'
-    ).pipe(map(() => 'active' as FilterType));
+    ).pipe(map(() => FilterType.Active));
     const filterCompletedClick$ = fromEvent<MouseEvent>(
       this.filterCompletedBtn,
       'click'
-    ).pipe(map(() => 'completed' as FilterType));
+    ).pipe(map(() => FilterType.Completed));
 
     return merge(filterAllClick$, filterActiveClick$, filterCompletedClick$);
   }
@@ -161,18 +164,25 @@ export class Todo {
   private updateFilterButtonsUI(filterType: FilterType): void {
     [this.filterAllBtn, this.filterActiveBtn, this.filterCompletedBtn].forEach(
       (btn) => {
-        btn.classList.remove('filter-button--active');
+        btn.classList.remove(`filter-button--${FilterType.All}`);
+        btn.classList.remove(`filter-button--${FilterType.Active}`);
+        btn.classList.remove(`filter-button--${FilterType.Completed}`);
       }
     );
+
     switch (filterType) {
-      case 'all':
-        this.filterAllBtn.classList.add('filter-button--active');
+      case FilterType.All:
+        this.filterAllBtn.classList.add(`filter-button--${FilterType.All}`);
         break;
-      case 'active':
-        this.filterActiveBtn.classList.add('filter-button--active');
+      case FilterType.Active:
+        this.filterActiveBtn.classList.add(
+          `filter-button--${FilterType.Active}`
+        );
         break;
-      case 'completed':
-        this.filterCompletedBtn.classList.add('filter-button--active');
+      case FilterType.Completed:
+        this.filterCompletedBtn.classList.add(
+          `filter-button--${FilterType.Completed}`
+        );
         break;
     }
   }
@@ -181,11 +191,11 @@ export class Todo {
     return combineLatest([this.tasksList$, this.filter$]).pipe(
       map(([tasks, filterType]) => {
         switch (filterType) {
-          case 'active':
-            return tasks.filter((task) => !task.completed);
-          case 'completed':
-            return tasks.filter((task) => task.completed);
-          case 'all':
+          case FilterType.Active:
+            return tasks.filter((tasks) => !tasks.completed);
+          case FilterType.Completed:
+            return tasks.filter((tasks) => tasks.completed);
+          case FilterType.All:
           default:
             return tasks;
         }
@@ -209,7 +219,7 @@ export class Todo {
   private appendTaskItemToUI(item: ITask): void {
     const listItem = this.createTaskItemElement(item);
     this.tasksList.appendChild(listItem);
-    this.setupTaskItemInteractions(listItem, item); // Gắn sự kiện cho mục mới
+    this.setupTaskItemInteractions(listItem, item);
   }
 
   private createTaskItemElement(item: ITask): HTMLLIElement {

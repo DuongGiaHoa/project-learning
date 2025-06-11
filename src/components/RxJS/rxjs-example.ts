@@ -1,47 +1,65 @@
+import { Editor } from '../Editor/editor';
+import { Timeline } from '../Timeline/timeline';
 import './rxjs-example.scss';
-import { MarbleEditor } from '../MarbleEditor/marble-editor';
-import { TimelineRenderer } from '../MarbleTimeline/marble-timeline';
+interface MarbleEvent {
+  time: number;
+  value: string;
+}
 
+export enum OperatorType {
+  MAP = 'map',
+  FILTER = 'filter',
+  MERGE_MAP = 'mergeMap',
+}
 export class RxjsVisualizer {
   private container: HTMLElement;
-  private outputZone: HTMLElement | null = null;
 
   constructor(container: HTMLElement) {
     this.container = container;
+    this.init();
   }
 
-  public render(): void {
-    this.container.innerHTML = '<h2>RxJS</h2>';
+  private init() {
+    this.container.innerHTML = '<h2>RxJS Visualizer</h2>';
 
-    const editor = new MarbleEditor(this.runVisualization.bind(this));
+    const editor = new Editor((input, operator) => {
+      this.runCustomVisualization(input, operator);
+    });
+
     this.container.appendChild(editor.getElement());
   }
 
-  private runVisualization(input: string, operator: string): void {
+  private runCustomVisualization(input: string, operator: string) {
     this.container.querySelector('.visualizer-output')?.remove();
-
-    this.outputZone = document.createElement('div');
-    this.outputZone.className = 'visualizer-output';
-    this.container.appendChild(this.outputZone);
+    const outputZone = this.createOutputZone();
 
     const events = this.parseMarbleInput(input);
-    const inputTimeline = new TimelineRenderer(this.outputZone, events, 'Input');
-    inputTimeline.render();
+    new Timeline(outputZone, events, 'Input');
 
-    let resultEvents: {time: number, value: string}[] = [];
+    const resultEvents = this.applyOperatorToEvents(events, operator);
+    new Timeline(outputZone, resultEvents, 'Output');
+  }
 
-    // Logic áp dụng toán tử RxJS
+  private createOutputZone(): HTMLElement {
+    const outputZone = document.createElement('div');
+    outputZone.className = 'visualizer-output';
+    this.container.appendChild(outputZone);
+    return outputZone;
+  }
+
+  private applyOperatorToEvents(events: MarbleEvent[], operator: string): MarbleEvent[] {
+    let resultEvents: MarbleEvent[] = [];
+  
     switch (operator) {
-      case 'map':
+      case OperatorType.MAP:
         resultEvents = events.map(e => ({ ...e, value: e.value.toUpperCase() }));
         break;
-
-      case 'filter':
+  
+      case OperatorType.FILTER:
         resultEvents = events.filter(e => e.value !== 'b');
         break;
 
-      case 'mergeMap':
-      case 'switchMap':
+      case OperatorType.MERGE_MAP:
         let currentTime = 0;
         events.forEach(e => {
           const innerEvents = [
@@ -49,22 +67,19 @@ export class RxjsVisualizer {
             { time: currentTime + 1, value: e.value + '1' },
             { time: currentTime + 2, value: e.value + '2' }
           ];
-
-          if (operator === 'switchMap') {
-            resultEvents = resultEvents.filter(ev => ev.time < currentTime);
-          }
+     
           resultEvents.push(...innerEvents);
           currentTime = e.time + 1;
         });
         break;
     }
-
-    const outputTimeline = new TimelineRenderer(this.outputZone, resultEvents, 'Output');
-    outputTimeline.render();
+  
+    return resultEvents;
   }
+  
 
-  private parseMarbleInput(input: string): {time: number, value: string}[] {
-    const result: Array<{time: number, value: string}> = [];
+  private parseMarbleInput(input: string): MarbleEvent[] {
+    const result: MarbleEvent[] = [];
     let time = 0;
     for (const char of input) {
       if (char === '-') {

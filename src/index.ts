@@ -32,7 +32,6 @@ function router() {
   switch (hash) {
     case '#/rxjs':
       const rxjsVisualizer = new RxjsVisualizer(content);
-      rxjsVisualizer.render();
       break;
 
     case '#/todo':
