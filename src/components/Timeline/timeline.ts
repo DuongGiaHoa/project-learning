@@ -1,9 +1,5 @@
+import { MarbleEvent } from '../RxJS/rxjs-example';
 import './timeline.scss';
-
-interface MarbleEvent {
-  time: number;
-  value: string;
-}
 
 export class Timeline {
   private container: HTMLElement;

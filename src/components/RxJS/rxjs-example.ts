@@ -1,7 +1,7 @@
 import { Editor } from '../Editor/editor';
 import { Timeline } from '../Timeline/timeline';
 import './rxjs-example.scss';
-interface MarbleEvent {
+export interface MarbleEvent {
   time: number;
   value: string;
 }
