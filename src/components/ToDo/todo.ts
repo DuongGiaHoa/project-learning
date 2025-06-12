@@ -239,7 +239,7 @@ export class Todo {
     taskItem.className = 'task-item__text';
 
     const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'Xóa';
+    deleteBtn.textContent = 'Delete';
     deleteBtn.className = 'task-item__delete-button';
 
     listItem.append(checkbox, taskItem, deleteBtn);
